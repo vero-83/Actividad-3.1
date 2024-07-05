@@ -5,10 +5,11 @@
 #include <iomanip> // set precision
 #include <mpi.h>
 
-#include "DataStructs.h"
-#include "rk4.h"
-#include "FluxFunctions.h"
-#include "RHSoperator.h"
+// Cambia las rutas de inclusión
+#include "includes/DataStructs.h"
+#include "includes/rk4.h"
+#include "includes/FluxFunctions.h"
+#include "includes/RHSoperator.h"
 
 #ifdef _DOUBLE_
 #define FLOATTYPE double
@@ -20,9 +21,11 @@
 void write2File(DataStruct<FLOATTYPE> &X, DataStruct<FLOATTYPE> &U, std::string name);
 FLOATTYPE calcL2norm(DataStruct<FLOATTYPE> &u, DataStruct<FLOATTYPE> &uinit);
 
-
 int main(int narg, char **argv)
 {
+  // Inicializar MPI
+  MPI_Init(&narg, &argv);
+
   int numPoints =  80;
   FLOATTYPE k = 2.; // wave number
 
@@ -31,9 +34,10 @@ int main(int narg, char **argv)
     std::cout<< "Wrong number of arguments. You should include:" << std::endl;
     std::cout<< "    Num points" << std::endl;
     std::cout<< "    Wave number" << std::endl;
+    // Finalizar MPI
+    MPI_Finalize();
     return 1;
-  }else
-  {
+  } else {
     numPoints = std::stoi(argv[1]);
     k         = std::stod(argv[2]);
   }
@@ -108,9 +112,10 @@ int main(int narg, char **argv)
   std::cout << " kdx: " << k*datax[1]*2.*M_PI;
   std::cout << std::endl;
 
+  // Finalizar MPI
+  MPI_Finalize();
   return 0;
 }
-
 
 // ==================================================================
 // AUXILIARY FUNCTIONS
@@ -146,3 +151,4 @@ FLOATTYPE calcL2norm(DataStruct<FLOATTYPE> &u, DataStruct<FLOATTYPE> &uinit)
 
   return sqrt( err );
 }
+

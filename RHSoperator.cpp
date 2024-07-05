@@ -1,4 +1,4 @@
-#include "RHSoperator.h"
+#include "includes/RHSoperator.h"
 
 template<class T>
 RHSOperator<T>::RHSOperator()
